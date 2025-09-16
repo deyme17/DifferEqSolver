@@ -6,7 +6,7 @@ from core import GraphPlotter
 
 class ResultsFrame:
     """Frame for displaying results and plot"""
-    def __init__(self, parent, plotter: GraphPlotter):
+    def __init__(self, parent, plotter_cls: GraphPlotter):
         """
         Initialize the results frame for numerical solution display and plotting.
         Args:
@@ -14,7 +14,7 @@ class ResultsFrame:
             plotter: GraphPlotter instance responsible for rendering solution plots.
         """
         self.parent = parent
-        self.plotter = plotter
+        self.plotter_cls = plotter_cls
         self.frame = ttk.Frame(parent)
         self.frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
 
@@ -33,8 +33,8 @@ class ResultsFrame:
         self.tree.grid(row=1, column=0, sticky="nsew", pady=10)
 
         # graph
-        self.plotter.init_graph(master=self.frame, figsize=(5, 3),
-                                row=2, column=0, sticky="nsew")
+        self.plotter = self.plotter_cls(master=self.frame, figsize=(5, 3),
+                    row=2, column=0, sticky="nsew")
 
         self.frame.rowconfigure(1, weight=1)
         self.frame.columnconfigure(0, weight=1)
