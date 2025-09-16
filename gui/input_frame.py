@@ -1,6 +1,9 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 from typing import Callable
+
+from sympy import sympify, symbols, lambdify
+from sympy.core.sympify import SympifyError
 
 
 
@@ -24,37 +27,52 @@ class InputFrame:
         self._create_widgets()
 
     def _create_widgets(self):
+        row = 0
+
+        # equation
+        ttk.Label(self.frame, text="y' = ").grid(row=row, column=0, sticky="w")
+        self.eq_entry = ttk.Entry(self.frame)
+        self.eq_entry.grid(row=row, column=1, sticky="ew", padx=5)
+        row += 1
+
         # y0
-        ttk.Label(self.frame, text="y₀:").grid(row=0, column=0, sticky="w")
+        ttk.Label(self.frame, text="y₀:").grid(row=row, column=0, sticky="w")
         self.y0_entry = ttk.Entry(self.frame)
-        self.y0_entry.grid(row=0, column=1, sticky="ew", padx=5)
+        self.y0_entry.grid(row=row, column=1, sticky="ew", padx=5)
+        row += 1
 
         # t0
-        ttk.Label(self.frame, text="t₀:").grid(row=1, column=0, sticky="w")
+        ttk.Label(self.frame, text="t₀:").grid(row=row, column=0, sticky="w")
         self.t0_entry = ttk.Entry(self.frame)
-        self.t0_entry.grid(row=1, column=1, sticky="ew", padx=5)
+        self.t0_entry.grid(row=row, column=1, sticky="ew", padx=5)
+        row += 1
 
         # t_end
-        ttk.Label(self.frame, text="t_end:").grid(row=2, column=0, sticky="w")
+        ttk.Label(self.frame, text="t_end:").grid(row=row, column=0, sticky="w")
         self.tend_entry = ttk.Entry(self.frame)
-        self.tend_entry.grid(row=2, column=1, sticky="ew", padx=5)
+        self.tend_entry.grid(row=row, column=1, sticky="ew", padx=5)
+        row += 1
 
         # epsilon
-        ttk.Label(self.frame, text="ε (точність):").grid(row=3, column=0, sticky="w")
+        ttk.Label(self.frame, text="ε (точність):").grid(row=row, column=0, sticky="w")
         self.eps_entry = ttk.Entry(self.frame)
-        self.eps_entry.grid(row=3, column=1, sticky="ew", padx=5)
+        self.eps_entry.grid(row=row, column=1, sticky="ew", padx=5)
+        row += 1
 
         # method
-        ttk.Label(self.frame, text="Метод:").grid(row=4, column=0, sticky="w")
+        ttk.Label(self.frame, text="Метод:").grid(row=row, column=0, sticky="w")
         self.method_var = tk.StringVar()
-        self.method_combo = ttk.Combobox(self.frame, textvariable=self.method_var, values=self.method_choices, state="readonly")
-        self.method_combo.grid(row=4, column=1, sticky="ew", padx=5)
+        self.method_combo = ttk.Combobox(
+            self.frame, textvariable=self.method_var, values=self.method_choices, state="readonly"
+        )
+        self.method_combo.grid(row=row, column=1, sticky="ew", padx=5)
         if self.method_choices:
             self.method_combo.current(0)
+        row += 1
 
         # calc
         calc_btn = ttk.Button(self.frame, text="Обчислити", command=self.calculate_callback)
-        calc_btn.grid(row=5, column=0, columnspan=2, pady=15, sticky="ew")
+        calc_btn.grid(row=row, column=0, columnspan=2, pady=15, sticky="ew")
 
         self.frame.columnconfigure(1, weight=1)
 
@@ -68,5 +86,18 @@ class InputFrame:
             "method": self.method_var.get()
         }
     
-    def get_equation(self):
-        ...
+    def get_equation(self) -> Callable[[float, float], float]:
+        """
+        Parse the user input equation string into a callable function f(t, y).
+        Returns:
+            allable f(t, y) representing the ODE y' = f(t, y).
+        """
+        expr_str = self.eq_entry.get()
+        t, y = symbols("t y")
+        try:
+            expr = sympify(expr_str)
+            func = lambdify((t, y), expr, "numpy")
+            return func
+        except SympifyError:
+            messagebox.showerror("Error", f"Invalid equation: {expr_str}")
+            raise ValueError(f"Invalid equation: {expr_str}")
