@@ -39,7 +39,7 @@ class ResultsFrame:
         self.frame.rowconfigure(1, weight=1)
         self.frame.columnconfigure(0, weight=1)
 
-    def update_results(self, ts: list[float], ys: list[float], exec_time: float):
+    def update_results(self, ts: list[float], ys: list[float], exec_time: float, real_answer: float = None):
         """Updates table and graph"""
         # update execution time
         self.time_label.config(text=f"Час виконання: {exec_time:.4f} c")
@@ -51,4 +51,4 @@ class ResultsFrame:
             self.tree.insert("", tk.END, values=(f"{t:.4f}", f"{y:.4f}"))
 
         # update graph
-        self.plotter.update_graph(ts, ys, y_lb="y", x_lb="t")
+        self.plotter.update_graph(ts, ys, y_lb="y", x_lb="t", real_answer=real_answer)

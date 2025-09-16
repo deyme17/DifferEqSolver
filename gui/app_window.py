@@ -69,7 +69,7 @@ class ODESolverApp:
         try:
             equation = self.input_frame.get_equation()
             params = self.input_frame.get_inputs()
-            y0, t0, t_end, eps, method = params.values()
+            y0, t0, t_end, eps, method, real_answer = params.values()
 
             # start timer
             start = time.time()
@@ -82,7 +82,7 @@ class ODESolverApp:
             exec_time = time.time() - start
 
             # update results
-            self.results_frame.update_results(ts, ys, exec_time)
+            self.results_frame.update_results(ts, ys, exec_time, real_answer)
             self.tab_control.select(self.tab2)
 
         except Exception as e:

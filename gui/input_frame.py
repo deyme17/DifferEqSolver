@@ -70,6 +70,12 @@ class InputFrame:
             self.method_combo.current(0)
         row += 1
 
+        # answer
+        ttk.Label(self.frame, text="Справжня відповідь (опціонально):").grid(row=row, column=0, sticky="w")
+        self.real_answer = ttk.Entry(self.frame)
+        self.real_answer.grid(row=row, column=1, sticky="ew", padx=5)
+        row += 1
+
         # calc
         calc_btn = ttk.Button(self.frame, text="Обчислити", command=self.calculate_callback)
         calc_btn.grid(row=row, column=0, columnspan=2, pady=15, sticky="ew")
@@ -83,7 +89,8 @@ class InputFrame:
             "t0": float(self.t0_entry.get()),
             "t_end": float(self.tend_entry.get()),
             "epsilon": float(self.eps_entry.get()),
-            "method": self.method_var.get()
+            "method": self.method_var.get(),
+            "real_answer": float(self.real_answer.get())
         }
     
     def get_equation(self) -> Callable[[float, float], float]:
