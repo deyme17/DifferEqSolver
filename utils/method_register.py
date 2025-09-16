@@ -1,4 +1,4 @@
-from methods.slae_solver import ODESolver
+from core import ODESolver
 
 class ODEMethodRegistry:
     _methods = {}
