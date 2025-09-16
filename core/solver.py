@@ -29,7 +29,7 @@ class ODESolver:
                 ts: Array of time points.
                 ys: Array of corresponding y values.
         """
-        method_inst= method()
+        method_inst: ODEMethodInterface = method()
         n_steps = int((t_end - t0) / epsilon) + 1
         ts = np.linspace(t0, t_end, n_steps)
         ys = np.zeros_like(ts)
