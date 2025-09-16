@@ -27,7 +27,7 @@ class ResultsFrame:
 
         # results
         cols = ("t", "y(t)")
-        self.tree = ttk.Treeview(self.frame, columns=cols, show="headings", height=10)
+        self.tree = ttk.Treeview(self.frame, columns=cols, show="headings", height=5)
         for col in cols:
             self.tree.heading(col, text=col)
         self.tree.grid(row=1, column=0, sticky="nsew", pady=10)

@@ -62,11 +62,16 @@ class InputFrame:
         # method
         ttk.Label(self.frame, text="Метод:").grid(row=row, column=0, sticky="w")
         self.method_var = tk.StringVar()
+
+        # split keys and labels
+        self.method_keys = [key for key, label in self.method_choices]
+        method_labels = [label for key, label in self.method_choices]
+
         self.method_combo = ttk.Combobox(
-            self.frame, textvariable=self.method_var, values=self.method_choices, state="readonly"
+            self.frame, textvariable=self.method_var, values=method_labels, state="readonly"
         )
         self.method_combo.grid(row=row, column=1, sticky="ew", padx=5)
-        if self.method_choices:
+        if method_labels:
             self.method_combo.current(0)
         row += 1
 
@@ -84,13 +89,14 @@ class InputFrame:
 
     def get_inputs(self):
         """Returns dict with all input data"""
+        method_idx = self.method_combo.current()
         real_answer_str = self.real_answer.get().strip()
         return {
             "y0": float(self.y0_entry.get()),
             "t0": float(self.t0_entry.get()),
             "t_end": float(self.tend_entry.get()),
             "epsilon": float(self.eps_entry.get()),
-            "method": self.method_var.get(),
+            "method": self.method_keys[method_idx],
             "real_answer": float(real_answer_str) if real_answer_str else None
         }
     
