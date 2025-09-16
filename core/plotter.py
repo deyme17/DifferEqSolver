@@ -44,7 +44,7 @@ class GraphPlotter:
         self.ax.plot(ts, ys, label=f"{y_label}({x_label})")
         
         if real_answer is not None:
-            self.ax.axhline(real_answer, color="r", linestyle="--", label="Real answer")
+            self.ax.axhline(real_answer, color="r", linestyle="--", label="Реальна відповідь")
         
         self.ax.set_xlabel(x_label)
         self.ax.set_ylabel(y_label)

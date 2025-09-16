@@ -113,5 +113,5 @@ class InputFrame:
             func = lambdify((t, y), expr, "numpy")
             return func
         except SympifyError:
-            messagebox.showerror("Error", f"Invalid equation: {expr_str}")
+            messagebox.showerror("Помилка", f"Неправильне рівняння: {expr_str}")
             raise ValueError(f"Invalid equation: {expr_str}")

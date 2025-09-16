@@ -33,7 +33,7 @@ class ResultsFrame:
         self.tree.grid(row=1, column=0, sticky="nsew", pady=10)
 
         # graph
-        self.plotter = self.plotter_cls(master=self.frame, figsize=(5, 3),
+        self.plotter: GraphPlotter = self.plotter_cls(master=self.frame, figsize=(5, 3),
                                         row=2, column=0, sticky="nsew")
 
         self.frame.rowconfigure(1, weight=1)
@@ -51,4 +51,4 @@ class ResultsFrame:
             self.tree.insert("", tk.END, values=(f"{t:.4f}", f"{y:.4f}"))
 
         # update graph
-        self.plotter.update_graph(ts, ys, y_lb="y", x_lb="t", real_answer=real_answer)
+        self.plotter.update_graph(ts, ys, y_label="y", x_label="t", real_answer=real_answer)

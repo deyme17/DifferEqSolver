@@ -36,6 +36,6 @@ class ODESolver:
 
         for i in range(1, n_steps):
             h = ts[i] - ts[i-1]
-            ys[i] = method.step(function, ts[i-1], ys[i-1], h)
+            ys[i] = method().step(function, ts[i-1], ys[i-1], h)
 
         return ts, ys
