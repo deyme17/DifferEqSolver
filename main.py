@@ -9,11 +9,12 @@ for method in ode_solve_methods:
 
 if __name__ == '__main__':
     root = Tk()
-    app = ODESolverApp(root=root,
+    app = ODESolverApp(
+                    root=root,
+                    solver=ODESolver(),
+                    register=ODEMethodRegistry(),
                     input_frame_cls=InputFrame,
                     result_frame_cls=ResultsFrame,
-                    solver=ODESolver(),
-                    plotter=GraphPlotter(),
-                    register=ODEMethodRegistry()
+                    plotter=GraphPlotter
                     )
     root.mainloop()

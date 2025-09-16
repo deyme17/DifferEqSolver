@@ -12,21 +12,21 @@ class ODESolverApp:
     """Main application class"""
     def __init__(self, 
                  root: Tk, 
+                 solver: ODESolver, 
+                 register: ODEMethodRegistry,
                  input_frame_cls: InputFrame, 
                  result_frame_cls: ResultsFrame,
-                 solver: ODESolver, 
-                 plotter: GraphPlotter,
-                 register: ODEMethodRegistry
+                 plotter_cls: GraphPlotter
                  ):
         """
         Initialize the main ODE solver application.
         Args:
             root: The main Tkinter root window.
+            solver: Numerical solver instance used for integrating differential equations.
+            register: Register of all ODE solving method used for handle method selection.
             input_frame: Frame handling user input for the ODE problem.
             result_frame: Frame responsible for displaying numerical results and performance metrics.
-            solver: Numerical solver instance used for integrating differential equations.
-            plotter: Class responsible for rendering solution plots.
-            register: Register of all ODE solving method used for handle method selection.
+            plotter_cls: Class responsible for rendering solution plots.
         """
         self.root = root
         self.root.title("Розв'язання Диференціальних рівнянь")
@@ -58,7 +58,7 @@ class ODESolverApp:
             tab.rowconfigure(0, weight=1)
 
         self.input_frame = input_frame_cls(self.tab1, self.calculate, register.get_method_choices())
-        self.results_frame = result_frame_cls(self.tab2, plotter)
+        self.results_frame = result_frame_cls(self.tab2, plotter_cls)
 
     def _configure_style(self):
         style = ttk.Style()
