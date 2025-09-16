@@ -93,7 +93,7 @@ class InputFrame:
             "real_answer": float(self.real_answer.get())
         }
     
-    def get_equation(self) -> Callable[[float, float], float]:
+    def get_function(self) -> Callable[[float, float], float]:
         """
         Parse the user input equation string into a callable function f(t, y).
         Returns:

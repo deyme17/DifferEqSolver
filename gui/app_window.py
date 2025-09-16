@@ -67,16 +67,16 @@ class ODESolverApp:
 
     def calculate(self):
         try:
-            equation = self.input_frame.get_equation()
+            function = self.input_frame.get_function()
             params = self.input_frame.get_inputs()
             y0, t0, t_end, eps, method, real_answer = params.values()
 
             # start timer
             start = time.time()
             ts, ys = self.solver.solve(
+                function=function,
                 epsilon=eps,
                 method=method,
-                equation=equation,
                 y0=y0, t0=t0, t_end=t_end
             )
             exec_time = time.time() - start
