@@ -34,7 +34,7 @@ class ResultsFrame:
 
         # graph
         self.plotter = self.plotter_cls(master=self.frame, figsize=(5, 3),
-                    row=2, column=0, sticky="nsew")
+                                        row=2, column=0, sticky="nsew")
 
         self.frame.rowconfigure(1, weight=1)
         self.frame.columnconfigure(0, weight=1)
