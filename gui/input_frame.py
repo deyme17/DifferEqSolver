@@ -84,13 +84,14 @@ class InputFrame:
 
     def get_inputs(self):
         """Returns dict with all input data"""
+        real_answer_str = self.real_answer.get().strip()
         return {
             "y0": float(self.y0_entry.get()),
             "t0": float(self.t0_entry.get()),
             "t_end": float(self.tend_entry.get()),
             "epsilon": float(self.eps_entry.get()),
             "method": self.method_var.get(),
-            "real_answer": float(self.real_answer.get())
+            "real_answer": float(real_answer_str) if real_answer_str else None
         }
     
     def get_function(self) -> Callable[[float, float], float]:
