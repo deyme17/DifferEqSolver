@@ -30,13 +30,48 @@ class ODESolver:
                 ys: Array of corresponding y values.
         """
         method_inst: ODEMethodInterface = method()
-        n_steps = int((t_end - t0) / epsilon) + 1
+        method_inst.reset()
+        
+        h = (t_end - t0) / 100
+        max_iterations = 10
+        
+        for _ in range(max_iterations):
+            method_inst.reset()
+            ts1, ys1 = ODESolver._solve_fixed_step(function, method_inst, h, y0, t0, t_end)
+
+            method_inst.reset()
+            ts2, ys2 = ODESolver._solve_fixed_step(function, method_inst, h/2, y0, t0, t_end)
+            
+            ys2_interp = np.interp(ts1, ts2, ys2)
+            
+            if len(ys1) > 1:
+                max_error = np.max(np.abs(ys2_interp - ys1))
+                if max_error < epsilon:
+                    return ts2, ys2
+            
+            h = h / 2
+            
+            if h < epsilon / 100:
+                break
+        
+        return ts2, ys2
+    
+    @staticmethod
+    def _solve_fixed_step(
+        function: Callable[[float, float], float],
+        method_inst: ODEMethodInterface,
+        h: float,
+        y0: float,
+        t0: float,
+        t_end: float
+    ) -> tuple[np.ndarray, np.ndarray]:
+        n_steps = int((t_end - t0) / h) + 1
         ts = np.linspace(t0, t_end, n_steps)
         ys = np.zeros_like(ts)
         ys[0] = y0
 
         for i in range(1, n_steps):
-            h = ts[i] - ts[i-1]
-            ys[i] = method_inst.step(function, ts[i-1], ys[i-1], h)
+            actual_h = ts[i] - ts[i-1]
+            ys[i] = method_inst.step(function, ts[i-1], ys[i-1], actual_h)
 
         return ts, ys

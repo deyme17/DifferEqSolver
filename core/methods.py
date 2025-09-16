@@ -19,6 +19,10 @@ class ODEMethodInterface(ABC):
         """
         pass
 
+    def reset(self):
+        """Reset method state (for methods that store previous values)"""
+        pass
+
 
 class EulerMethod(ODEMethodInterface):
     """Explicit Euler method"""
@@ -44,6 +48,10 @@ class AdamsMethod(ODEMethodInterface):
 
     def __init__(self):
         self.prev_f = None
+    
+    def reset(self):
+        """Reset stored values for new calculation"""
+        self.prev_f_values = []
     
     def step(self, f: Callable, t: float, y: float, h: float) -> float:
         if self.prev_f is None:
