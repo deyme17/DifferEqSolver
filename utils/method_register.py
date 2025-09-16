@@ -1,11 +1,11 @@
-from core import ODESolver
+from core import ODEMethodInterface
 
 class ODEMethodRegistry:
     _methods = {}
 
     @classmethod
     def register(cls, method_class):
-        if not issubclass(method_class, ODESolver):
+        if not issubclass(method_class, ODEMethodInterface):
             raise TypeError("Method must inherit from ODESolver")
         cls._methods[method_class.__name__.lower()] = method_class
         return method_class

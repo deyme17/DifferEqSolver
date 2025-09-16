@@ -1,7 +1,7 @@
 from tkinter import Tk
-from gui.app_window import ODESolverApp
+from gui.app_window import ODESolverApp, InputFrame, ResultsFrame
 
-from core import ode_solve_methods
+from core import ode_solve_methods, ODESolver, GraphPlotter
 from utils.method_register import ODEMethodRegistry
 
 for method in ode_solve_methods:
@@ -9,5 +9,10 @@ for method in ode_solve_methods:
 
 if __name__ == '__main__':
     root = Tk()
-    app = ODESolverApp(root)
+    app = ODESolverApp(root=root,
+                    input_frame_cls=InputFrame,
+                    result_frame_cls=ResultsFrame,
+                    solver=ODESolver(),
+                    plotter=GraphPlotter()
+                    )
     root.mainloop()

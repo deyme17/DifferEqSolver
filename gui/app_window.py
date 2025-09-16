@@ -10,8 +10,8 @@ class ODESolverApp:
     """Main application class"""
     def __init__(self, 
                  root: Tk, 
-                 input_frame: InputFrame, 
-                 result_frame: ResultsFrame,
+                 input_frame_cls: InputFrame, 
+                 result_frame_cls: ResultsFrame,
                  solver: ODESolver, 
                  plotter: GraphPlotter
                  ):
@@ -51,8 +51,8 @@ class ODESolverApp:
             tab.columnconfigure(0, weight=1)
             tab.rowconfigure(0, weight=1)
 
-        self.input_frame = input_frame(self.tab1, self.calculate, ODEMethodRegistry.get_method_choices())
-        self.results_frame = result_frame(self.tab2, plotter)
+        self.input_frame = input_frame_cls(self.tab1, self.calculate, ODEMethodRegistry.get_method_choices())
+        self.results_frame = result_frame_cls(self.tab2, plotter)
 
     def _configure_style(self):
         style = ttk.Style()
