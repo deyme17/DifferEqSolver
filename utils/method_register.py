@@ -1,6 +1,8 @@
 from typing import Optional
 from core import ODEMethodInterface
 
+
+
 class ODEMethodRegistry:
     _methods: dict[str, ODEMethodInterface]
 

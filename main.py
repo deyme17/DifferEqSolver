@@ -7,6 +7,8 @@ from utils.method_register import ODEMethodRegistry
 for method in ode_solve_methods:
     ODEMethodRegistry.register(method)
 
+
+
 if __name__ == '__main__':
     root = Tk()
     app = ODESolverApp(
