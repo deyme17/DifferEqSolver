@@ -15,7 +15,8 @@ class ODESolverApp:
                  input_frame_cls: InputFrame, 
                  result_frame_cls: ResultsFrame,
                  solver: ODESolver, 
-                 plotter: GraphPlotter
+                 plotter: GraphPlotter,
+                 register: ODEMethodRegistry
                  ):
         """
         Initialize the main ODE solver application.
@@ -25,11 +26,14 @@ class ODESolverApp:
             result_frame: Frame responsible for displaying numerical results and performance metrics.
             solver: Numerical solver instance used for integrating differential equations.
             plotter: Class responsible for rendering solution plots.
+            register: Register of all ODE solving method used for handle method selection.
         """
         self.root = root
-        self.solver = solver
         self.root.title("Розв'язання Диференціальних рівнянь")
         self.root.geometry("900x600")
+
+        self.solver = solver
+        self.register = register
 
         self._configure_style()
 
@@ -53,7 +57,7 @@ class ODESolverApp:
             tab.columnconfigure(0, weight=1)
             tab.rowconfigure(0, weight=1)
 
-        self.input_frame = input_frame_cls(self.tab1, self.calculate, ODEMethodRegistry.get_method_choices())
+        self.input_frame = input_frame_cls(self.tab1, self.calculate, register.get_method_choices())
         self.results_frame = result_frame_cls(self.tab2, plotter)
 
     def _configure_style(self):
@@ -69,7 +73,8 @@ class ODESolverApp:
         try:
             function = self.input_frame.get_function()
             params = self.input_frame.get_inputs()
-            y0, t0, t_end, eps, method, real_answer = params.values()
+            y0, t0, t_end, eps, method_id, real_answer = params.values()
+            method = self.register.get_method(method_id)
 
             # start timer
             start = time.time()

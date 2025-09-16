@@ -13,6 +13,7 @@ if __name__ == '__main__':
                     input_frame_cls=InputFrame,
                     result_frame_cls=ResultsFrame,
                     solver=ODESolver(),
-                    plotter=GraphPlotter()
+                    plotter=GraphPlotter(),
+                    register=ODEMethodRegistry()
                     )
     root.mainloop()
