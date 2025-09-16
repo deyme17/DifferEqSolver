@@ -6,6 +6,8 @@ from . import InputFrame, ResultsFrame
 from core import ODESolver, GraphPlotter
 from utils.method_register import ODEMethodRegistry
 
+
+
 class ODESolverApp:
     """Main application class"""
     def __init__(self, 
