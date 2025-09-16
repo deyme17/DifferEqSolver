@@ -2,7 +2,8 @@ import tkinter as tk
 from tkinter import Tk, ttk, messagebox
 import time
 
-from . import InputFrame, ResultsFrame
+from .input_frame import InputFrame
+from .results_frame import ResultsFrame
 from core import ODESolver, GraphPlotter
 from utils.method_register import ODEMethodRegistry
 

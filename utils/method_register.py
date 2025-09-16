@@ -4,7 +4,7 @@ from core import ODEMethodInterface
 
 
 class ODEMethodRegistry:
-    _methods: dict[str, ODEMethodInterface]
+    _methods: dict[str, ODEMethodInterface] = {}
 
     @classmethod
     def register(cls, method_class: ODEMethodInterface) -> ODEMethodInterface:
