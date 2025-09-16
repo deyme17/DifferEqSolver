@@ -1,8 +1,8 @@
 from typing import Callable
 from abc import ABC, abstractmethod
 
-class ODESolver(ABC):
-    """Base class for ODE solvers"""
+class ODEMethodInterface(ABC):
+    """Base class for ODE methods"""
     @abstractmethod
     def step(self, f: Callable, t: float, y: float, h: float) -> float:
         """
@@ -17,13 +17,13 @@ class ODESolver(ABC):
         """
         pass
 
-class EulerMethod(ODESolver):
+class EulerMethod(ODEMethodInterface):
     """Explicit Euler method"""
     display_name = "Метод Ейлера"
     def step(self, f: Callable, t: float, y: float, h: float) -> float:
         return y + h * f(t, y)
     
-class RungeKuttaMethod(ODESolver):
+class RungeKuttaMethod(ODEMethodInterface):
     """Explicit Runge-Kutta method"""
     display_name = "Метод Рунге-Кутта"
     def step(self, f: Callable, t: float, y: float, h: float) -> float:
@@ -33,10 +33,10 @@ class RungeKuttaMethod(ODESolver):
         k4 = f(t + h,   y + h * k3)
         return y + h/6 * (k1 + 2*k2 + 2*k3 + k4)
 
-class AdamsMethod(ODESolver):
+class AdamsMethod(ODEMethodInterface):
     """Explicit Adams method"""
     display_name = "Метод Адамса"
-    
+
     def __init__(self):
         self.prev_f = None
     
