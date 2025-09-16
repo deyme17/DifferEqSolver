@@ -17,6 +17,6 @@ if __name__ == '__main__':
                     register=ODEMethodRegistry(),
                     input_frame_cls=InputFrame,
                     result_frame_cls=ResultsFrame,
-                    plotter=GraphPlotter
+                    plotter_cls=GraphPlotter
                     )
     root.mainloop()
