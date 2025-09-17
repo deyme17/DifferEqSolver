@@ -2,7 +2,7 @@ from typing import Callable, Optional
 import sympy as sp
 import numpy as np
 import time
-from methods import ODEMethodInterface
+from . import ODEMethodInterface
 
 
 class ODESolver:

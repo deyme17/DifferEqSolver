@@ -18,6 +18,7 @@ class ComparisonFrame:
         self.frame = ttk.Frame(parent)
         self.frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
         
+        self.compare_callback = None
         self._create_widgets()
 
     def _create_widgets(self):
@@ -55,8 +56,6 @@ class ComparisonFrame:
         self.frame.rowconfigure(3, weight=2)
         self.frame.columnconfigure(0, weight=1)
         self.frame.columnconfigure(1, weight=1)
-        
-        self.compare_callback = None
 
     def set_compare_callback(self, callback):
         """Set callback function for comparison"""

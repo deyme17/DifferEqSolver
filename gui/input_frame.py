@@ -87,12 +87,6 @@ class InputFrame:
             self.method_combo.current(0)
         row += 1
 
-        # answer
-        ttk.Label(self.frame, text="Справжня відповідь (opt.):").grid(row=row, column=0, sticky="w")
-        self.real_answer = ttk.Entry(self.frame)
-        self.real_answer.grid(row=row, column=1, sticky="ew", padx=5)
-        row += 1
-
         # calc
         calc_btn = ttk.Button(self.frame, text="Обчислити", command=self.calculate_callback)
         calc_btn.grid(row=row, column=0, columnspan=2, pady=15, sticky="ew")
@@ -102,7 +96,6 @@ class InputFrame:
     def get_inputs(self):
         """Returns dict with all input data"""
         method_idx = self.method_combo.current()
-        real_answer_str = self.real_answer.get().strip()
         try:
             return {
                 "y0": float(self.y0_entry.get()),
@@ -112,7 +105,6 @@ class InputFrame:
                 "epsilon": float(self.eps_entry.get()),
                 "max_steps": int(self.max_steps_entry.get()) if self.max_steps_entry.get().strip() else None,
                 "method": self.method_keys[method_idx],
-                "real_answer": float(real_answer_str) if real_answer_str else None
             }
         except ValueError as e:
             messagebox.showerror("Помилка", f"Некоректне числове значення: {e}")
