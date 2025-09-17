@@ -36,7 +36,7 @@ class ODESolverApp:
         """
         self.root = root
         self.root.title("Розв'язання Диференціальних рівнянь")
-        self.root.geometry("900x800")
+        self.root.geometry("700x700")
 
         self.solver: ODESolver = solver
         self.register: ODEMethodRegistry = register
