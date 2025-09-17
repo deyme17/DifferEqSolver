@@ -50,3 +50,29 @@ class GraphPlotter:
         self.ax.legend()
         self.ax.grid(True)
         self.canvas.draw()
+
+    def update_comparison_graph(self, results: dict) -> None:
+        """
+        Plot error comparison for different methods.
+        Args:
+            results: dict[str, dict] 
+                    key = method_name, 
+                    value = {'ts': time points, 'errors': error values}
+        """
+        self.ax.clear()
+        colors = ['blue', 'red', 'green', 'orange', 'purple', 'brown', 'pink', 'gray']
+        linestyles = ['-', '--', '-.', ':', '-', '--', '-.', ':']
+        
+        for i, (method_name, result) in enumerate(results.items()):
+            ts, errors = result['ts'], result['errors']
+            color = colors[i % len(colors)]
+            linestyle = linestyles[i % len(linestyles)]
+            self.ax.plot(ts, errors, color=color, linestyle=linestyle, 
+                        label=f"{method_name}", linewidth=2)
+        
+        self.ax.set_xlabel('t')
+        self.ax.set_ylabel('Похибка')
+        self.ax.set_title("Порівняння похибок методів розв'язування ДР")
+        self.ax.grid(True)
+        self.ax.legend()
+        self.canvas.draw()

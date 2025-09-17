@@ -91,24 +91,57 @@ class InputFrame:
         calc_btn = ttk.Button(self.frame, text="Обчислити", command=self.calculate_callback)
         calc_btn.grid(row=row, column=0, columnspan=2, pady=15, sticky="ew")
 
+        # default values
+        self.y0_entry.insert(0, "0")
+        self.t0_entry.insert(0, "0.0")
+        self.tend_entry.insert(0, "2.0")
+        self.eps_entry.insert(0, "0.001")
+        self.h_entry.insert(0, "0.1")
+
         self.frame.columnconfigure(1, weight=1)
 
     def get_inputs(self):
-        """Returns dict with all input data"""
+        """Returns dict with all input data with improved validation"""
         method_idx = self.method_combo.current()
         try:
+            y0 = float(self.y0_entry.get())
+            t0 = float(self.t0_entry.get())
+            t_end = float(self.tend_entry.get())
+            epsilon = float(self.eps_entry.get())
+
+            h_str = self.h_entry.get().strip()
+            h = float(h_str) if h_str else None
+            
+            max_steps_str = self.max_steps_entry.get().strip()
+            max_steps = int(max_steps_str) if max_steps_str else None
+            
+            self._validate_inputs(t_end, t0, epsilon, y0, h, max_steps)
             return {
-                "y0": float(self.y0_entry.get()),
-                "t0": float(self.t0_entry.get()),
-                "t_end": float(self.tend_entry.get()),
-                "h": float(self.h_entry.get()) if self.h_entry.get().strip() else None,
-                "epsilon": float(self.eps_entry.get()),
-                "max_steps": int(self.max_steps_entry.get()) if self.max_steps_entry.get().strip() else None,
+                "y0": y0,
+                "t0": t0,
+                "t_end": t_end,
+                "h": h,
+                "epsilon": epsilon,
+                "max_steps": max_steps,
                 "method": self.method_keys[method_idx],
             }
         except ValueError as e:
             messagebox.showerror("Помилка", f"Некоректне числове значення: {e}")
             raise
+    
+    @staticmethod
+    def _validate_inputs(t_end: float, t0: float, epsilon: float, y0: float, h: float, max_steps: int) -> None:
+        """Validates inputs and raise ValueError if input is not valid"""
+        if t_end <= t0:
+            raise ValueError("t_end має бути більше за t0")
+        if epsilon <= 0:
+            raise ValueError("Точність (epsilon) має бути додатним числом")
+        if abs(y0) > 1e10:
+            raise ValueError("Початкове значення y0 занадто велике")
+        if h and (h <= 0 or h > (t_end - t0)):
+            raise ValueError("Невалідний крок h")
+        if max_steps and max_steps <= 0:
+            raise ValueError("Максимальна кількість кроків має бути додатною")
 
     def get_function(self) -> Callable[[float, float], float]:
         """

@@ -12,7 +12,9 @@ class MethodComparator:
         y0: float,
         t0: float,
         t_end: float,
-        methods: list[ODEMethodInterface]
+        methods: list[ODEMethodInterface],
+        h: float = None,
+        max_iter: int = None
     ) -> dict[str, dict]:
         """
         Compare multiple ODE solving methods
@@ -23,12 +25,13 @@ class MethodComparator:
         for method_class in methods:
             method_name = method_class.display_name
             
-            # Solve with current method
             ts, ys, exec_time = ODESolver.solve(
-                function, method_class, epsilon, y0, t0, t_end
+                function=function,
+                method=method_class,
+                epsilon=epsilon,
+                y0=y0, t0=t0, t_end=t_end,
+                h=h, max_iter=max_iter
             )
-            
-            # Count integration points
             num_points = len(ts)
             
             results[method_name] = {

@@ -69,9 +69,6 @@ class ODESolverApp:
         self.input_frame: InputFrame = input_frame_cls(self.tab1, self.calculate, self.register.get_method_choices())
         self.results_frame: ResultsFrame = result_frame_cls(self.tab2, plotter_cls)
         self.comparison_frame: ComparisonFrame = comparison_frame_cls(self.tab3, plotter_cls)
-        
-        # comparison callback
-        self.comparison_frame.set_compare_callback(self.compare_methods)
 
     def _configure_style(self):
         style = ttk.Style()
@@ -94,6 +91,7 @@ class ODESolverApp:
             analytical_func = self.solver.solve_analytical(equation_str, (t0, y0))
             if analytical_func:
                 self.results_frame.set_analytical_solution(analytical_func, equation_str)
+                self.comparison_frame.set_analytical_solution(analytical_func)
 
             # solve numerically
             ts, ys, exec_time = self.solver.solve(
@@ -105,6 +103,7 @@ class ODESolverApp:
             )
             # update results
             self.results_frame.update_results(ts, ys, exec_time)
+            self.compare_methods()
             self.tab_control.select(self.tab2)
 
         except Exception as e:
@@ -115,12 +114,12 @@ class ODESolverApp:
         try:
             function = self.input_frame.get_function()
             params = self.input_frame.get_inputs()
-            y0, t0, t_end, _, eps, _, _ = params.values()
+            y0, t0, t_end, h, eps, max_iter, _ = params.values()
             
             # compare methods
             methods = self.register.get_all_methods()
             results = self.comparator.compare_methods(
-                function, eps, y0, t0, t_end, methods
+                function, eps, y0, t0, t_end, methods, h, max_iter
             )
             # update comparison frame
             self.comparison_frame.update_comparison_results(results)
