@@ -29,7 +29,7 @@ class GraphPlotter:
 
     def update_graph(self, ts: np.ndarray, ys: np.ndarray, 
                      y_label: str = "y", x_label: str = "t", 
-                     real_answer: float = None) -> None:
+                     analytical_ys: float = None) -> None:
         """
         Update the plot with new data.
         Args:
@@ -37,16 +37,16 @@ class GraphPlotter:
             ys (np.ndarray): Array of corresponding y values.
             y_label (str, optional): Label for y-axis and plot legend. Defaults to "y".
             x_label (str, optional): Label for x-axis and plot legend. Defaults to "t".
-            real_answer (float, optional): If provided, draws a horizontal line indicating 
-                the real/analytical solution for comparison. Defaults to None.
+            analytical_ys: Array of analytical solution values for comparison
         """
         self.ax.clear()
-        self.ax.plot(ts, ys, label=f"{y_label}({x_label})")
+        self.ax.plot(ts, ys, 'b-', label="Чисельний розв'язок")
         
-        if real_answer is not None:
-            self.ax.axhline(real_answer, color="r", linestyle="--", label="Реальна відповідь")
+        if analytical_ys is not None:
+            self.ax.plot(ts, analytical_ys, 'r--', label="Точний розв'язок")
         
         self.ax.set_xlabel(x_label)
         self.ax.set_ylabel(y_label)
         self.ax.legend()
+        self.ax.grid(True)
         self.canvas.draw()
