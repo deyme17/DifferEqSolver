@@ -35,6 +35,7 @@ class ODESolver:
                 exec_time: Execution time in seconds.
         """
         h = (t_end - t0) / 10 if not h else h
+        max_iter = 10 if not max_iter else max_iter
         
         start_time = time.time()
         

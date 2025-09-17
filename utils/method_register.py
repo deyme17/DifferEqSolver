@@ -23,3 +23,7 @@ class ODEMethodRegistry:
             (key, getattr(cls._methods[key], "display_name", key.title()))
             for key in cls._methods
         ]
+    
+    @classmethod
+    def get_all_methods(cls) -> list[ODEMethodInterface]:
+        return list(cls._methods.values())

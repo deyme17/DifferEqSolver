@@ -90,7 +90,7 @@ class ODESolverApp:
             method = self.register.get_method(method_id)
 
             # analytical solution
-            equation_str = self.input_frame.eq_entry.get()
+            equation_str = self.input_frame.get_equation()
             analytical_func = self.solver.solve_analytical(equation_str, (t0, y0))
             if analytical_func:
                 self.results_frame.set_analytical_solution(analytical_func, equation_str)
@@ -115,7 +115,7 @@ class ODESolverApp:
         try:
             function = self.input_frame.get_function()
             params = self.input_frame.get_inputs()
-            y0, t0, t_end, h, eps, max_iter, _, _ = params.values()
+            y0, t0, t_end, _, eps, _, _ = params.values()
             
             # compare methods
             methods = self.register.get_all_methods()

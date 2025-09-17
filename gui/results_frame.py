@@ -39,7 +39,7 @@ class ResultsFrame:
         self.tree.grid(row=1, column=0, columnspan=2, sticky="nsew", pady=10)
         
         # graph
-        self.plotter: GraphPlotter = self.plotter_cls(master=self.frame, figsize=(5, 3),
+        self.plotter: GraphPlotter = self.plotter_cls(master=self.frame, figsize=(8, 4),
                                         row=2, column=0, sticky="nsew")
         
         self.frame.rowconfigure(1, weight=1)

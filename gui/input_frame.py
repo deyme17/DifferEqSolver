@@ -58,7 +58,7 @@ class InputFrame:
         self.eps_entry = ttk.Entry(self.frame)
         self.eps_entry.grid(row=row, column=1, sticky="ew", padx=5)
         row += 1
-        
+
         # step h
         ttk.Label(self.frame, text="Крок h (opt.):").grid(row=row, column=0, sticky="w")
         self.h_entry = ttk.Entry(self.frame)
@@ -101,7 +101,7 @@ class InputFrame:
                 "y0": float(self.y0_entry.get()),
                 "t0": float(self.t0_entry.get()),
                 "t_end": float(self.tend_entry.get()),
-                "h": float(self.h_entry.get()),
+                "h": float(self.h_entry.get()) if self.h_entry.get().strip() else None,
                 "epsilon": float(self.eps_entry.get()),
                 "max_steps": int(self.max_steps_entry.get()) if self.max_steps_entry.get().strip() else None,
                 "method": self.method_keys[method_idx],
@@ -125,3 +125,9 @@ class InputFrame:
         except SympifyError:
             messagebox.showerror("Помилка", f"Неправильне рівняння: {expr_str}")
             raise ValueError(f"Invalid equation: {expr_str}")
+        
+    def get_equation(self) -> str:
+        """
+        Returns an equation that user inputted.
+        """
+        return self.eq_entry.get()
