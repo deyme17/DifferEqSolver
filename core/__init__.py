@@ -3,3 +3,4 @@ ode_solve_methods: list[ODEMethodInterface] = [EulerMethod, RungeKuttaMethod, Ad
 
 from .solver import ODESolver
 from .plotter import GraphPlotter
+from .comparison import MethodComparator
