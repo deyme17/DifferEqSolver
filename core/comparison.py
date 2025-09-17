@@ -21,7 +21,7 @@ class MethodComparator:
         results = {}
         
         for method_class in methods:
-            method_name: ODEMethodInterface = method_class.display_name
+            method_name = method_class.display_name
             
             # Solve with current method
             ts, ys, exec_time = ODESolver.solve(

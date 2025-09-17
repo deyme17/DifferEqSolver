@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import ttk
 import numpy as np
 from core.plotter import GraphPlotter
+from typing import Callable
+
 
 
 class ResultsFrame:
@@ -46,10 +48,13 @@ class ResultsFrame:
         self.frame.columnconfigure(0, weight=1)
         self.frame.columnconfigure(1, weight=1)
 
-    def set_analytical_solution(self, analytical_func: callable, equation_str: str):
+    def set_analytical_solution(self, analytical_func: Callable, equation_str: str):
         """Set the analytical solution function"""
         self.analytical_solution = analytical_func
-        self.analytical_label.config(text=f"Точний розв'язок: знайдено")
+        if analytical_func:
+            self.analytical_label.config(text=f"Точний розв'язок: {equation_str}")
+        else:
+            self.analytical_label.config(text="Точний розв'язок: не знайдено")
 
     def update_results(self, ts: np.ndarray, ys: np.ndarray, exec_time: float):
         """Updates table and graph with numerical results"""
