@@ -29,29 +29,28 @@ class ODESolver:
                 ts: Array of time points.
                 ys: Array of corresponding y values.
         """
-        method_inst: ODEMethodInterface = method()
-        method_inst.reset()
-        
-        h = (t_end - t0) / 100
+        h = (t_end - t0) / 10
         max_iterations = 10
         
         for _ in range(max_iterations):
-            method_inst.reset()
-            ts1, ys1 = ODESolver._solve_fixed_step(function, method_inst, h, y0, t0, t_end)
+            method_inst1: ODEMethodInterface = method()
+            method_inst1.reset()
+            ts1, ys1 = ODESolver._solve_fixed_step(function, method_inst1, h, y0, t0, t_end)
+            
+            method_inst2: ODEMethodInterface = method()
+            method_inst2.reset()
+            ts2, ys2 = ODESolver._solve_fixed_step(function, method_inst2, h/2, y0, t0, t_end)
+            
+            if len(ts1) > 1 and len(ts2) > 1:
+                ys2_interp = np.interp(ts1, ts2, ys2)
+                max_diff = np.max(np.abs(ys2_interp - ys1))
 
-            method_inst.reset()
-            ts2, ys2 = ODESolver._solve_fixed_step(function, method_inst, h/2, y0, t0, t_end)
-            
-            ys2_interp = np.interp(ts1, ts2, ys2)
-            
-            if len(ys1) > 1:
-                max_error = np.max(np.abs(ys2_interp - ys1))
-                if max_error < epsilon:
+                if max_diff < epsilon:
                     return ts2, ys2
             
             h = h / 2
             
-            if h < epsilon / 100:
+            if h < epsilon * 1e-6:
                 break
         
         return ts2, ys2
