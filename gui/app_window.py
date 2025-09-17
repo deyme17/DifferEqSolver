@@ -74,7 +74,7 @@ class ODESolverApp:
         try:
             function = self.input_frame.get_function()
             params = self.input_frame.get_inputs()
-            y0, t0, t_end, eps, method_id, real_answer = params.values()
+            y0, t0, t_end, h, eps, max_iter, method_id, real_answer = params.values()
             method = self.register.get_method(method_id)
 
             # start timer
@@ -83,7 +83,8 @@ class ODESolverApp:
                 function=function,
                 epsilon=eps,
                 method=method,
-                y0=y0, t0=t0, t_end=t_end
+                y0=y0, t0=t0, t_end=t_end,
+                h=h, max_iter=max_iter
             )
             exec_time = time.time() - start
 

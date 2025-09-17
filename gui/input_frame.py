@@ -53,10 +53,22 @@ class InputFrame:
         self.tend_entry.grid(row=row, column=1, sticky="ew", padx=5)
         row += 1
 
+        # step h
+        ttk.Label(self.frame, text="Крок h (opt.):").grid(row=row, column=0, sticky="w")
+        self.h_entry = ttk.Entry(self.frame)
+        self.h_entry.grid(row=row, column=1, sticky="ew", padx=5)
+        row += 1
+
         # epsilon
         ttk.Label(self.frame, text="ε (точність):").grid(row=row, column=0, sticky="w")
         self.eps_entry = ttk.Entry(self.frame)
         self.eps_entry.grid(row=row, column=1, sticky="ew", padx=5)
+        row += 1
+
+        # max steps
+        ttk.Label(self.frame, text="Макс. к-сть кроків (opt.):").grid(row=row, column=0, sticky="w")
+        self.max_steps_entry = ttk.Entry(self.frame)
+        self.max_steps_entry.grid(row=row, column=1, sticky="ew", padx=5)
         row += 1
 
         # method
@@ -76,7 +88,7 @@ class InputFrame:
         row += 1
 
         # answer
-        ttk.Label(self.frame, text="Справжня відповідь (опціонально):").grid(row=row, column=0, sticky="w")
+        ttk.Label(self.frame, text="Справжня відповідь (opt.):").grid(row=row, column=0, sticky="w")
         self.real_answer = ttk.Entry(self.frame)
         self.real_answer.grid(row=row, column=1, sticky="ew", padx=5)
         row += 1
@@ -91,15 +103,21 @@ class InputFrame:
         """Returns dict with all input data"""
         method_idx = self.method_combo.current()
         real_answer_str = self.real_answer.get().strip()
-        return {
-            "y0": float(self.y0_entry.get()),
-            "t0": float(self.t0_entry.get()),
-            "t_end": float(self.tend_entry.get()),
-            "epsilon": float(self.eps_entry.get()),
-            "method": self.method_keys[method_idx],
-            "real_answer": float(real_answer_str) if real_answer_str else None
-        }
-    
+        try:
+            return {
+                "y0": float(self.y0_entry.get()),
+                "t0": float(self.t0_entry.get()),
+                "t_end": float(self.tend_entry.get()),
+                "h": float(self.h_entry.get()),
+                "epsilon": float(self.eps_entry.get()),
+                "max_steps": int(self.max_steps_entry.get()) if self.max_steps_entry.get().strip() else None,
+                "method": self.method_keys[method_idx],
+                "real_answer": float(real_answer_str) if real_answer_str else None
+            }
+        except ValueError as e:
+            messagebox.showerror("Помилка", f"Некоректне числове значення: {e}")
+            raise
+
     def get_function(self) -> Callable[[float, float], float]:
         """
         Parse the user input equation string into a callable function f(t, y).

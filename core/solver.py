@@ -13,7 +13,9 @@ class ODESolver:
         epsilon: float,
         y0: float,
         t0: float,
-        t_end: float
+        t_end: float,
+        h: float = None,
+        max_iter: int = 10
     ) -> tuple[np.ndarray, np.ndarray]:
         """
         Solve an ODE y' = f(t, y) numerically using the selected method.
@@ -24,15 +26,15 @@ class ODESolver:
             y0: Initial value y(t0).
             t0: Initial time.
             t_end: End time.
+            h: ste
         Returns:
             Tuple of arrays (ts, ys):
                 ts: Array of time points.
                 ys: Array of corresponding y values.
         """
-        h = (t_end - t0) / 10
-        max_iterations = 10
+        h = (t_end - t0) / 10 if not h else h
         
-        for _ in range(max_iterations):
+        for _ in range(max_iter):
             method_inst1: ODEMethodInterface = method()
             method_inst1.reset()
             ts1, ys1 = ODESolver._solve_fixed_step(function, method_inst1, h, y0, t0, t_end)
