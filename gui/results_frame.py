@@ -30,7 +30,7 @@ class ResultsFrame:
         
         # analytical solution label
         self.analytical_label = ttk.Label(self.frame, text="Точний розв'язок: не знайдено")
-        self.analytical_label.grid(row=0, column=1, sticky="w")
+        self.analytical_label.grid(row=1, column=0, sticky="w")
         
         # results table
         cols = ("t", "y(t)", "y_точне(t)", "похибка")
@@ -38,12 +38,11 @@ class ResultsFrame:
         for col in cols:
             self.tree.heading(col, text=col)
             self.tree.column(col, width=100)
-        self.tree.grid(row=1, column=0, columnspan=2, sticky="nsew", pady=10)
+        self.tree.grid(row=2, column=0, columnspan=2, sticky="nsew", pady=10)
         
         # graph
         self.plotter: GraphPlotter = self.plotter_cls(master=self.frame, figsize=(8, 4),
-                                        row=2, column=0, sticky="nsew")
-        
+                                        row=3, column=0, sticky="nsew")
         self.frame.rowconfigure(1, weight=1)
         self.frame.columnconfigure(0, weight=1)
         self.frame.columnconfigure(1, weight=1)
@@ -52,9 +51,7 @@ class ResultsFrame:
         """Set the analytical solution function"""
         self.analytical_solution = analytical_func
         if analytical_func:
-            self.analytical_label.config(text=f"Точний розв'язок: {equation_str}")
-        else:
-            self.analytical_label.config(text="Точний розв'язок: не знайдено")
+            self.analytical_label.config(text=f"Точний розв'язок для y' = {equation_str}: Знайдено")
 
     def update_results(self, ts: np.ndarray, ys: np.ndarray, exec_time: float):
         """Updates table and graph with numerical results"""

@@ -49,8 +49,10 @@ class ComparisonFrame:
         scrollbar.grid(row=2, column=2, sticky="ns")
         
         # comparison plot
-        self.comp_plotter = self.plotter_cls(master=self.frame, figsize=(8, 5),
+        self.res_plotter = self.plotter_cls(master=self.frame, figsize=(8, 5),
                                            row=3, column=0, sticky="nsew")
+        self.time_plotter = self.plotter_cls(master=self.frame, figsize=(8, 5),
+                                           row=3, column=1, sticky="nsew")
         
         self.frame.rowconfigure(2, weight=1)
         self.frame.rowconfigure(3, weight=2)
@@ -83,12 +85,27 @@ class ComparisonFrame:
                 f"{last_y:.6f}"
             ))
         
-        # update comparison plot
+        # update
         self._plot_comparison(results)
+        self._plot_comparison_time(results)
+        
+    def _plot_comparison_time(self, results: dict):
+        """Plot execution time comparison for all methods"""
+        self.time_plotter.ax.clear()
+
+        method_names = list(results.keys())
+        exec_times = [results[name]['execution_time'] for name in method_names]
+
+        self.time_plotter.bar(method_names, exec_times, color='skyblue')
+        self.time_plotter.set_ylabel('Час виконання (с)')
+        self.time_plotter.set_xlabel('Метод')
+        self.time_plotter.set_title('Порівняння часу виконання методів')
+        self.time_plotter.grid(True, axis='y')
+        self.time_plotter.canvas.draw()
 
     def _plot_comparison(self, results: dict):
         """Plot all methods on the same graph for comparison"""
-        self.comp_plotter.ax.clear()
+        self.res_plotter.ax.clear()
         
         colors = ['blue', 'red', 'green', 'orange', 'purple']
         linestyles = ['-', '--', '-.', ':', '-']
@@ -98,12 +115,12 @@ class ComparisonFrame:
             color = colors[i % len(colors)]
             linestyle = linestyles[i % len(linestyles)]
             
-            self.comp_plotter.ax.plot(ts, ys, color=color, linestyle=linestyle, 
+            self.res_plotter.ax.plot(ts, ys, color=color, linestyle=linestyle, 
                                     label=method_name, linewidth=2)
         
-        self.comp_plotter.ax.set_xlabel('t')
-        self.comp_plotter.ax.set_ylabel('y')
-        self.comp_plotter.ax.legend()
-        self.comp_plotter.ax.grid(True)
-        self.comp_plotter.ax.set_title('Порівняння методів розв\'язування ДР')
-        self.comp_plotter.canvas.draw()
+        self.res_plotter.ax.set_xlabel('t')
+        self.res_plotter.ax.set_ylabel('y')
+        self.res_plotter.ax.legend()
+        self.res_plotter.ax.grid(True)
+        self.res_plotter.ax.set_title('Порівняння методів розв\'язування ДР')
+        self.res_plotter.canvas.draw()
