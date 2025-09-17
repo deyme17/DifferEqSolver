@@ -86,7 +86,7 @@ class ODESolverApp:
         try:
             function = self.input_frame.get_function()
             params = self.input_frame.get_inputs()
-            y0, t0, t_end, h, eps, max_iter, method_id, real_answer = params.values()
+            y0, t0, t_end, h, eps, max_iter, method_id = params.values()
             method = self.register.get_method(method_id)
 
             # analytical solution
@@ -104,7 +104,7 @@ class ODESolverApp:
                 h=h, max_iter=max_iter
             )
             # update results
-            self.results_frame.update_results(ts, ys, exec_time, real_answer)
+            self.results_frame.update_results(ts, ys, exec_time)
             self.tab_control.select(self.tab2)
 
         except Exception as e:

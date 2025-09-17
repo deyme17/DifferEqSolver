@@ -53,16 +53,16 @@ class InputFrame:
         self.tend_entry.grid(row=row, column=1, sticky="ew", padx=5)
         row += 1
 
-        # step h
-        ttk.Label(self.frame, text="Крок h (opt.):").grid(row=row, column=0, sticky="w")
-        self.h_entry = ttk.Entry(self.frame)
-        self.h_entry.grid(row=row, column=1, sticky="ew", padx=5)
-        row += 1
-
         # epsilon
         ttk.Label(self.frame, text="ε (точність):").grid(row=row, column=0, sticky="w")
         self.eps_entry = ttk.Entry(self.frame)
         self.eps_entry.grid(row=row, column=1, sticky="ew", padx=5)
+        row += 1
+        
+        # step h
+        ttk.Label(self.frame, text="Крок h (opt.):").grid(row=row, column=0, sticky="w")
+        self.h_entry = ttk.Entry(self.frame)
+        self.h_entry.grid(row=row, column=1, sticky="ew", padx=5)
         row += 1
 
         # max steps
