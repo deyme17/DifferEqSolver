@@ -51,9 +51,6 @@ class ComparisonFrame:
         # comparison plot
         self.res_plotter = self.plotter_cls(master=self.frame, figsize=(8, 5),
                                            row=3, column=0, sticky="nsew")
-        self.time_plotter = self.plotter_cls(master=self.frame, figsize=(8, 5),
-                                           row=3, column=1, sticky="nsew")
-        
         self.frame.rowconfigure(2, weight=1)
         self.frame.rowconfigure(3, weight=2)
         self.frame.columnconfigure(0, weight=1)
@@ -87,21 +84,6 @@ class ComparisonFrame:
         
         # update
         self._plot_comparison(results)
-        self._plot_comparison_time(results)
-        
-    def _plot_comparison_time(self, results: dict):
-        """Plot execution time comparison for all methods"""
-        self.time_plotter.ax.clear()
-
-        method_names = list(results.keys())
-        exec_times = [results[name]['execution_time'] for name in method_names]
-
-        self.time_plotter.bar(method_names, exec_times, color='skyblue')
-        self.time_plotter.set_ylabel('Час виконання (с)')
-        self.time_plotter.set_xlabel('Метод')
-        self.time_plotter.set_title('Порівняння часу виконання методів')
-        self.time_plotter.grid(True, axis='y')
-        self.time_plotter.canvas.draw()
 
     def _plot_comparison(self, results: dict):
         """Plot all methods on the same graph for comparison"""
