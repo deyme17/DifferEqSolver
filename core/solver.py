@@ -84,7 +84,7 @@ class ODESolver:
         return ts, ys
     
     @staticmethod
-    def solve_analytical(equation_str: str, initial_condition: tuple[float, float]) -> Optional[Callable]:
+    def solve_analytical(equation_str: str, initial_condition: tuple[float, float]) -> Optional[tuple[Callable, str]]:
         """
         Solve ODE analytically using SymPy
         Args:
@@ -115,8 +115,8 @@ class ODESolver:
                         particular_solution = solution.rhs
                 else:
                     particular_solution = solution.rhs
-                
-                return sp.lambdify(t, particular_solution, 'numpy')
+
+                return sp.lambdify(t, particular_solution, 'numpy'), str(particular_solution)
                 
         except Exception as e:
             print(f"Analytical solution error: {e}")

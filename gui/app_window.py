@@ -88,9 +88,9 @@ class ODESolverApp:
 
             # analytical solution
             equation_str = self.input_frame.get_equation()
-            analytical_func = self.solver.solve_analytical(equation_str, (t0, y0))
+            analytical_func, analytical_equation_str = self.solver.solve_analytical(equation_str, (t0, y0))
             if analytical_func:
-                self.results_frame.set_analytical_solution(analytical_func, equation_str)
+                self.results_frame.set_analytical_solution(analytical_func, equation_str, analytical_equation_str)
                 self.comparison_frame.set_analytical_solution(analytical_func)
 
             # solve numerically

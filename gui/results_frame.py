@@ -47,11 +47,11 @@ class ResultsFrame:
         self.frame.columnconfigure(0, weight=1)
         self.frame.columnconfigure(1, weight=1)
 
-    def set_analytical_solution(self, analytical_func: Callable, equation_str: str):
+    def set_analytical_solution(self, analytical_func: Callable, equation_str: str, analytical_equation_str: str):
         """Set the analytical solution function"""
         self.analytical_solution = analytical_func
         if analytical_func:
-            self.analytical_label.config(text=f"Точний розв'язок для y' = {equation_str}: Знайдено")
+            self.analytical_label.config(text=f"Точний розв'язок для y' = {equation_str} -------> {analytical_equation_str}")
 
     def update_results(self, ts: np.ndarray, ys: np.ndarray, exec_time: float):
         """Updates table and graph with numerical results"""
