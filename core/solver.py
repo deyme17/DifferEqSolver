@@ -21,7 +21,7 @@ class ODESolver:
     @staticmethod
     def solve(
         function: Callable[[float, float], float],
-        method: ODEMethodInterface,
+        method: type[ODEMethodInterface],
         epsilon: float,
         y0: float,
         t0: float,
@@ -33,7 +33,7 @@ class ODESolver:
         Args:
             function: Callable f(t, y) representing the ODE.
             epsilon: Desired accuracy (not used in fixed-step method, kept for compatibility).
-            method: Numerical method for solving differential equations.
+            method: Numerical method cls for solving differential equations.
             y0: Initial value y(t0).
             t0: Initial time.
             t_end: End time.
@@ -48,9 +48,18 @@ class ODESolver:
         
         # Default step size
         max_iter = 10000 if max_iter is None else max_iter
+        solver_method = method()
         
         start_time = time.time()
-        ts, ys = ODESolver._solve_adaptive(function, method(), epsilon, y0, t0, t_end)
+        if solver_method.support_adaptive:
+            ts, ys = ODESolver._solve_adaptive(
+                function, solver_method, epsilon, y0, t0, t_end, max_iter
+            )
+        else:
+            h = (t_end - t0) * 0.01
+            ts, ys = ODESolver._solve_fixed_step(
+                function, solver_method, h, y0, t0, t_end, max_iter
+            )
         exec_time = time.time() - start_time
 
         return ts, ys, exec_time
@@ -62,14 +71,16 @@ class ODESolver:
         epsilon: float,
         y0: float,
         t0: float,
-        t_end: float
+        t_end: float,
+        max_iter: int
     ) -> tuple[np.ndarray, np.ndarray]:
         ts, ys = [t0], [y0]
         t, y = t0, y0
         h  = (t_end - t0) * 0.01
         h_min = (t_end - t0) * 1e-12
 
-        while t < t_end:
+        cnt = 0
+        while t < t_end and cnt <= max_iter:
             if t + h > t_end:
                 h = t_end - t
 
@@ -90,6 +101,8 @@ class ODESolver:
                 h /= 2
                 if h < h_min:
                     raise RuntimeError("Step size became too small")
+                
+            cnt += 1
 
         return np.array(ts), np.array(ys)
 
@@ -100,9 +113,10 @@ class ODESolver:
         h: float,
         y0: float,
         t0: float,
-        t_end: float
+        t_end: float,
+        max_iter: int
     ) -> tuple[np.ndarray, np.ndarray]:
-        n_steps = min(int((t_end - t0) / h) + 1, 10000)
+        n_steps = min(int((t_end - t0) / h) + 1, max_iter)
         ts = np.linspace(t0, t_end, n_steps)
         ys = np.zeros_like(ts)
         ys[0] = y0
