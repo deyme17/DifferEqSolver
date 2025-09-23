@@ -91,7 +91,7 @@ class ODESolver:
             equation_str: String representation of ODE right side (e.g., "t + y")
             initial_condition: Tuple (t0, y0)
         Returns:
-            Callable function y(t) or None if solution not found
+            Callable function y(t) and exact solution (equation) or None if solution not found
         """
         try:
             t = sp.symbols('t')
