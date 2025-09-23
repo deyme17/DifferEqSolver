@@ -59,11 +59,11 @@ class InputFrame:
         self.eps_entry.grid(row=row, column=1, sticky="ew", padx=5)
         row += 1
 
-        # step h
-        ttk.Label(self.frame, text="Крок h (opt.):").grid(row=row, column=0, sticky="w")
-        self.h_entry = ttk.Entry(self.frame)
-        self.h_entry.grid(row=row, column=1, sticky="ew", padx=5)
-        row += 1
+        # # step h
+        # ttk.Label(self.frame, text="Крок h (opt.):").grid(row=row, column=0, sticky="w")
+        # self.h_entry = ttk.Entry(self.frame)
+        # self.h_entry.grid(row=row, column=1, sticky="ew", padx=5)
+        # row += 1
 
         # max steps
         ttk.Label(self.frame, text="Макс. к-сть кроків (opt.):").grid(row=row, column=0, sticky="w")
@@ -96,7 +96,7 @@ class InputFrame:
         self.t0_entry.insert(0, "0.0")
         self.tend_entry.insert(0, "2.0")
         self.eps_entry.insert(0, "0.001")
-        self.h_entry.insert(0, "0.1")
+        # self.h_entry.insert(0, "0.1")
 
         self.frame.columnconfigure(1, weight=1)
 
@@ -108,19 +108,16 @@ class InputFrame:
             t0 = float(self.t0_entry.get())
             t_end = float(self.tend_entry.get())
             epsilon = float(self.eps_entry.get())
-
-            h_str = self.h_entry.get().strip()
-            h = float(h_str) if h_str else None
             
             max_steps_str = self.max_steps_entry.get().strip()
             max_steps = int(max_steps_str) if max_steps_str else None
             
-            self._validate_inputs(t_end, t0, epsilon, y0, h, max_steps)
+            self._validate_inputs(t_end, t0, epsilon, y0, max_steps)
             return {
                 "y0": y0,
                 "t0": t0,
                 "t_end": t_end,
-                "h": h,
+                # "h": h,
                 "epsilon": epsilon,
                 "max_steps": max_steps,
                 "method": self.method_keys[method_idx],
@@ -130,7 +127,7 @@ class InputFrame:
             raise
     
     @staticmethod
-    def _validate_inputs(t_end: float, t0: float, epsilon: float, y0: float, h: float, max_steps: int) -> None:
+    def _validate_inputs(t_end: float, t0: float, epsilon: float, y0: float, max_steps: int) -> None:
         """Validates inputs and raise ValueError if input is not valid"""
         if t_end <= t0:
             raise ValueError("t_end має бути більше за t0")
@@ -138,8 +135,8 @@ class InputFrame:
             raise ValueError("Точність (epsilon) має бути додатним числом")
         if abs(y0) > 1e10:
             raise ValueError("Початкове значення y0 занадто велике")
-        if h and (h <= 0 or h > (t_end - t0)):
-            raise ValueError("Невалідний крок h")
+        # if h and (h <= 0 or h > (t_end - t0)):
+        #     raise ValueError("Невалідний крок h")
         if max_steps and max_steps <= 0:
             raise ValueError("Максимальна кількість кроків має бути додатною")
 

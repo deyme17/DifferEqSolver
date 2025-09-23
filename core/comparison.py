@@ -13,7 +13,6 @@ class MethodComparator:
         t0: float,
         t_end: float,
         methods: list[ODEMethodInterface],
-        h: float = None,
         max_iter: int = None
     ) -> dict[str, dict]:
         """
@@ -30,7 +29,7 @@ class MethodComparator:
                 method=method_class,
                 epsilon=epsilon,
                 y0=y0, t0=t0, t_end=t_end,
-                h=h, max_iter=max_iter
+                max_iter=max_iter
             )
             num_points = len(ts)
             

@@ -83,7 +83,7 @@ class ODESolverApp:
         try:
             function = self.input_frame.get_function()
             params = self.input_frame.get_inputs()
-            y0, t0, t_end, h, eps, max_iter, method_id = params.values()
+            y0, t0, t_end, eps, max_iter, method_id = params.values()
             method = self.register.get_method(method_id)
 
             # analytical solution
@@ -99,7 +99,7 @@ class ODESolverApp:
                 epsilon=eps,
                 method=method,
                 y0=y0, t0=t0, t_end=t_end,
-                h=h, max_iter=max_iter
+                max_iter=max_iter
             )
             # update results
             self.results_frame.update_results(ts, ys, exec_time)
@@ -114,12 +114,12 @@ class ODESolverApp:
         try:
             function = self.input_frame.get_function()
             params = self.input_frame.get_inputs()
-            y0, t0, t_end, h, eps, max_iter, _ = params.values()
+            y0, t0, t_end, eps, max_iter, _ = params.values()
             
             # compare methods
             methods = self.register.get_all_methods()
             results = self.comparator.compare_methods(
-                function, eps, y0, t0, t_end, methods, h, max_iter
+                function, eps, y0, t0, t_end, methods, max_iter
             )
             # update comparison frame
             self.comparison_frame.update_comparison_results(results)

@@ -26,7 +26,6 @@ class ODESolver:
         y0: float,
         t0: float,
         t_end: float,
-        h: float = None,
         max_iter: int = None
     ) -> tuple[np.ndarray, np.ndarray, float]:
         """
@@ -38,7 +37,6 @@ class ODESolver:
             y0: Initial value y(t0).
             t0: Initial time.
             t_end: End time.
-            h: Fixed step size (optional, defaults to (t_end - t0) / 100).
             max_iter: Maximum number of steps (optional, defaults to 10000).
         Returns:
             Tuple of arrays (ts, ys, exec_time):
@@ -49,15 +47,56 @@ class ODESolver:
         ODESolver._validate_inputs(y0, t0, t_end, epsilon)
         
         # Default step size
-        h = (t_end - t0) / 100 if h is None else h
         max_iter = 10000 if max_iter is None else max_iter
         
         start_time = time.time()
-        ts, ys = ODESolver._solve_fixed_step(function, method(), h, y0, t0, t_end)
+        ts, ys = ODESolver._solve_adaptive(function, method(), epsilon, y0, t0, t_end)
         exec_time = time.time() - start_time
 
         return ts, ys, exec_time
-    
+
+    @staticmethod
+    def _solve_adaptive(
+        function: Callable[[float, float], float],
+        method_inst: ODEMethodInterface,
+        epsilon: float,
+        y0: float,
+        t0: float,
+        t_end: float,
+        h0: float = 0.1,
+        h_min: float = 1e-6
+    ) -> tuple[np.ndarray, np.ndarray]:
+        ts = [t0]
+        ys = [y0]
+
+        t = t0
+        y = y0
+        h = h0
+
+        while t < t_end:
+            if t + h > t_end:
+                h = t_end - t
+
+            y1 = method_inst.step(function, t, y, h)
+            y_half = method_inst.step(function, t, y, h / 2)
+            y2 = method_inst.step(function, t + h / 2, y_half, h / 2)
+            error = abs(y2 - y1)
+
+            if error < epsilon:
+                t += h
+                y = y2
+                ts.append(t)
+                ys.append(y)
+
+                if error < epsilon / 4:
+                    h *= 2
+            else:
+                h /= 2
+                if h < h_min:
+                    raise RuntimeError("Step size became too small")
+
+        return np.array(ts), np.array(ys)
+
     @staticmethod
     def _solve_fixed_step(
         function: Callable[[float, float], float],
