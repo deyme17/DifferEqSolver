@@ -23,6 +23,10 @@ class ODEMethodInterface(ABC):
         """Reset method state (for methods that store previous values)"""
         pass
 
+    @property
+    def support_adaptive(self) -> bool:
+        """Does this method support adaptive step size?"""
+        return False
 
 class EulerMethod(ODEMethodInterface):
     """Explicit Euler method"""
@@ -30,6 +34,9 @@ class EulerMethod(ODEMethodInterface):
     def step(self, f: Callable, t: float, y: float, h: float) -> float:
         return y + h * f(t, y)
     
+    @property
+    def support_adaptive(self) -> bool:
+        return True
 
 class RungeKuttaMethod(ODEMethodInterface):
     """Explicit Runge-Kutta method"""
@@ -41,6 +48,9 @@ class RungeKuttaMethod(ODEMethodInterface):
         k4 = f(t + h,   y + h * k3)
         return y + h/6 * (k1 + 2*k2 + 2*k3 + k4)
 
+    @property
+    def support_adaptive(self) -> bool:
+        return True
 
 class AdamsMethod(ODEMethodInterface):
     """Explicit Adams-Bashforth 4th order method згідно з формулою (1.160)"""
