@@ -62,16 +62,12 @@ class ODESolver:
         epsilon: float,
         y0: float,
         t0: float,
-        t_end: float,
-        h0: float = 0.1,
-        h_min: float = 1e-6
+        t_end: float
     ) -> tuple[np.ndarray, np.ndarray]:
-        ts = [t0]
-        ys = [y0]
-
-        t = t0
-        y = y0
-        h = h0
+        ts, ys = [t0], [y0]
+        t, y = t0, y0
+        h  = (t_end - t0) * 0.01
+        h_min = (t_end - t0) * 1e-12
 
         while t < t_end:
             if t + h > t_end:
