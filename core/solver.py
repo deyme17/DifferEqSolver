@@ -56,7 +56,7 @@ class ODESolver:
                 function, solver_method, epsilon, y0, t0, t_end, max_iter
             )
         else:
-            h = (t_end - t0) * 0.01
+            h = (t_end - t0) * epsilon
             ts, ys = ODESolver._solve_fixed_step(
                 function, solver_method, h, y0, t0, t_end, max_iter
             )
